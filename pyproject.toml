@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "transit-clustering"
+version = "0.1.0"
+description = ""
+authors = ["Megan Moore mm7148@uchicago.edu"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.0"
+pendulum = "2.1.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
