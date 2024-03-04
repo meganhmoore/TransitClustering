@@ -141,7 +141,7 @@ def plot_nuanced_service_densities(census_df, bus_df):
         classification_kwds={"bins": breaks15},
     )
     # Add a colorbar
-    cbar = plt.colorbar(plt.cm.ScalarMappable(cmap="coolwarm"), ax=ax)
+    cbar = plt.colorbar(plt.cm.ScalarMappable(cmap="coolwarm_r"), ax=ax)
     cbar.set_label("Bus Stop Service By Census Tract")
     plt.title("Bus Stop Service By Census Tract")
     plt.savefig("./figures/true_scheduled_bus_density_fromhinges.png")
