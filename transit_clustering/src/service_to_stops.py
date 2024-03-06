@@ -127,8 +127,6 @@ def plot_nuanced_service_densities(census_df, bus_df):
         point_sum_df, geometry=gpd.GeoSeries(census_bus_crs_df["geometry"])
     )
 
-    # geom_stops_df = point_sum_gdf.merge(census_bus_crs_df, on="geoid10")
-
     # create bins of service
     breaks15 = pygeoda.hinge15_breaks(point_sum_gdf["count"])
 
@@ -150,6 +148,6 @@ def plot_nuanced_service_densities(census_df, bus_df):
 
 if __name__ == "__main__":
     census_df, bus_df, prob_census_df = get_data()
-    # plot_service_by_stop(census_df, bus_df)
-    # plot_service_density(prob_census_df)
+    plot_service_by_stop(census_df, bus_df)
+    plot_service_density(prob_census_df)
     plot_nuanced_service_densities(census_df, bus_df)

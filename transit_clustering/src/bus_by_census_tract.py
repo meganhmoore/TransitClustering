@@ -46,8 +46,15 @@ def get_bus_density_by_census_tract(bus_df, census_df):
     prob_census_df["exppts"] = avg_intensity * prob_census_df["areakm2"]
 
     fig, ax = plt.subplots()
-    prob_census_df[["exppts", "geometry"]].plot("exppts", legend=True)
+    prob_census_df[["exppts", "geometry"]].plot("exppts", legend=True, vmax=70)
+    plt.title("Expected Bus Stop Count Per Tract")
     # plt.savefig("figures/balanced_census_bus.png")
+    plt.show()
+
+    fig, ax = plt.subplots()
+    prob_census_df[["count", "geometry"]].plot("count", legend=True, vmax=70)
+    plt.title("Actual Bus Stop Count Per Tract")
+    # plt.savefig("figures/actual_bus_per_tract.png")
     plt.show()
 
     prob_census_df["ptprob"] = poisson.pmf(
