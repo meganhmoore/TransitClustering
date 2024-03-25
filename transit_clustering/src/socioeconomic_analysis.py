@@ -1,24 +1,34 @@
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import pygeoda
 import statsmodels.api as sm
 
-PATH = "~/Documents/spatial_clustering/final_project/data/"
 
+def get_census_bus_data(
+    path: str = "~/Documents/spatial_clustering/final_project/data/",
+):
+    """
+    Read in census data, bus schedule data and bus stop point data.
 
-def get_census_bus_data():
+    Inputs:
+        path (str): path to read files from
+
+    Returns:
+        point_sum_gdf (gpd.GeoDataFrame): census with count of bus stops
+        point_sum_df (pd.DataFrame): scheduled service to all bus stops in a
+            census tract.
+        census_df (gpd.GeoDataFrame): census geometries
+    """
     # get census data
     census_df = gpd.read_file(
-        PATH + "census_tracts/geo_export_a19e0577-c0ec-456a-8bea-703d57c3459d.shp"
+        path + "census_tracts/geo_export_a19e0577-c0ec-456a-8bea-703d57c3459d.shp"
     )
 
     # get full bus schedule per week
-    schedule_df = pd.read_csv(PATH + "google_transit/stop_times.txt")
+    schedule_df = pd.read_csv(path + "google_transit/stop_times.txt")
 
     # get bus stop point data
-    bus_point_df = gpd.read_file(PATH + "CTA_BusStops/CTA_BusStops.shp")
+    bus_point_df = gpd.read_file(path + "CTA_BusStops/CTA_BusStops.shp")
     bus_point_df["SYSTEMSTOP"] = bus_point_df["SYSTEMSTOP"].astype(int)
 
     stop_counts = schedule_df.groupby("stop_id").size().reset_index(name="stop_count")
@@ -44,10 +54,24 @@ def get_census_bus_data():
 
 
 def assess_socioecon_factor(
-    point_sum_gdf, point_sum_df, census_df, socioec_df, socioec_col
+    point_sum_gdf: gpd.GeoDataFrame,
+    point_sum_df: pd.DataFrame,
+    census_df: gpd.GeoDataFrame,
+    socioec_df: pd.DataFrame,
+    socioec_col: str,
+    save_fig: bool = False,
 ):
     """
     Given a specific socioeconomic factor, clean, merge and run analysis.
+
+    Inputs:
+        point_sum_gdf (gpd.GeoDataFrame): census with count of bus stops
+        point_sum_df (pd.DataFrame): scheduled service to all bus stops in a
+            census tract.
+        census_df (gpd.GeoDataFrame): census geometries
+        socioec_df (pd.DataFrame): socioeconomic factor we are modeling
+        socioec_col (str): column containing factor of interest
+        save_fig (bool): whether too save figure that gets produced
     """
 
     census_tracts = list(point_sum_gdf.loc[:, "geoid10"].unique())
@@ -65,7 +89,8 @@ def assess_socioecon_factor(
         socioec_col, legend=True, vmax=0.2, vmin=-0.2
     )
     plt.title(f"{socioec_col} Rate Per Tract")
-    # plt.savefig(f"../figures/{sociodem_col}_per_tract.png")
+    if save_fig:
+        plt.savefig(f"../figures/{socioec_col}_per_tract.png")
     plt.show()
 
     df_cleaned = socio_stats.dropna(subset=[socioec_col])
@@ -78,7 +103,7 @@ def assess_socioecon_factor(
     print(model.summary())
 
 
-def run_regressions():
+def run_regressions(path: str = "~/Documents/spatial_clustering/final_project/data/"):
     """
     Get each socioeconomic factor, analyze, plot, and run a regression on bus
     service to determine if there is a statistically significant correlation.
@@ -86,19 +111,24 @@ def run_regressions():
     1) Job growth
     2) Household income
     3) Incarceration
+
+    Inputs:
+        path (str): path to read files from
     """
     point_sum_gdf, point_sum_df, census_df = get_census_bus_data()
     employment = pd.read_csv(
-        PATH + "demographics/tract_ann_avg_job_growth_2004_2013.csv"
+        path + "demographics/tract_ann_avg_job_growth_2004_2013.csv"
     )
     employment_col = "Job_Growth_Rate_from_2004_to_2013"
 
-    income = pd.read_csv(PATH + "demographics/tract_kfr_allSubgroups.csv")
+    income = pd.read_csv(path + "demographics/tract_kfr_allSubgroups.csv")
     income_col = "kfr_rA_gP_pall"
 
-    incarceration = pd.read_csv(PATH + "demographics/tract_jail_rP_gP_pall.csv")
+    incarceration = pd.read_csv(path + "demographics/tract_jail_rP_gP_pall.csv")
     incarceration_col = "Incarceration_Rate_rP_gP_pall"
 
+    # assess each of the factors of interest (employment, income,
+    # incarceration)
     assess_socioecon_factor(
         point_sum_gdf, point_sum_df, census_df, employment, employment_col
     )

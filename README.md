@@ -1,6 +1,9 @@
 # TransitClustering
 TransitClustering: Mapping CTA Inequality in Chicago using geospatial clustering methods.
 
+This is the code for the GISC Spatial Clustering course final project. It was primarily an exploratory project so code has not been fully productionized, see [Project Next Steps](#project-next-steps) for future work and steps to building it out. 
+
+To read the final report, see `SpatialClusteringProject.pdf`
 
 # Background 
 Chicago has one of the busiest and most utilized public transit systems in the United States, providing 243.5 million rides in 2022 to a service community of 3.2 million people. And with an operating budget of nearly $2 billion, it has
@@ -28,4 +31,18 @@ Data is not made available in this repository but it is open source and should b
 This project uses poetry for python dependency management.
 1. Make sure you have poetry installed in your virtual environment (`pip install poetry`)
 2. Run `poetry install` and all dependencies will be installed in your environment
+3. Exploratory work can be founnd in the notebooks, but each step of the analysis has been made into a script that can be found under  `transit_clustering/src`
 3. To run the different analysis scripts, from the root directory run `python transit_clustering/src/<script>.py`
+
+# Project Next Steps
+New data:
+* [Chicago ghost bus](https://ghostbuses.com/) data from Chi Hack Night would be extremely useful to measure the service that is actually ocurring rather than purely planned, as I hypothesize that some areas have more cancellations and failure of service than others
+* Incorporate the L (CTA trains) to further explore the transit landscape and fill gaps.
+* Commute data: this will be useful to understand current transit methods and where people are commuting to. I would be curious to understand commute patterns that do not match transit patterns (i.e. not commuting to or through economic centers), and I would like to get a sense of whether certain communities are utilizing transit but are suffering from slow/poor service or if communities have deserted transit altogether and use cars instead. 
+* Reproduce analysis for other metropolitan areas (SF-BART, NYC-MTA, etc.)
+
+This project is not yet productionized, to do this I would:
+* Establish consistent data paths (internal to repo)
+* Create scripts for downloading publically available data
+* Add [click](https://click.palletsprojects.com/en/8.1.x/) so that stages can be run from the command line
+* Add orchestration script to run the full data ingestion, analysis and produce reporting figures. 

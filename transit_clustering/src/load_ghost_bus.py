@@ -1,3 +1,11 @@
+"""
+This script is provided by ChiHack Ghost Bus group,
+it is not currently integrated into the data pipeline.
+
+It will be the starting point for ingesting daily bus activity to compute
+actual service and compare it to scheduled service.
+"""
+
 import pendulum
 import pandas as pd
 
