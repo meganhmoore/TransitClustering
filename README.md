@@ -46,3 +46,4 @@ This project is not yet productionized, to do this I would:
 * Create scripts for downloading publically available data
 * Add [click](https://click.palletsprojects.com/en/8.1.x/) so that stages can be run from the command line
 * Add orchestration script to run the full data ingestion, analysis and produce reporting figures. 
+* Add pytest testing to validate data shapes/types and make the project ready to scale to other metro areas/transit systems
